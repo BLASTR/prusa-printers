@@ -1,13 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
+import { IPrinter, Printers } from '@components/Pages/Printers/Printers';
+import { NextPage } from 'next';
 
-const Title = styled.h1`
-  font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
-`;
+interface IProps {
+  data: IPrinter[];
+}
 
-const Home: React.FC = () => {
-  return <Title>Prusa 3D</Title>;
+const Page: NextPage<IProps> = ({ data }) => <Printers data={data} />;
+
+export const getServerSideProps = async () => {
+  const response = await fetch('https://my.backend/list');
+  const printers = await response.json();
+
+  return {
+    props: {
+      data: printers,
+    },
+  };
 };
 
-export default Home;
+export default Page;
